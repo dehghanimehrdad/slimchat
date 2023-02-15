@@ -25,7 +25,7 @@ class DBUserRepository implements UserRepository
      */
     public function findUserOfId(int $id): User
     {
-        return User::find($id);
+        return User::findOrFail($id);
     }
 
     /**
@@ -50,6 +50,14 @@ class DBUserRepository implements UserRepository
     public function update(User $user, $attributes): bool
     {
         return $user->update($attributes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findUserOfToken(string $token): User
+    {
+        return User::where('token', $token)->get()->first();
     }
 
 }

@@ -28,6 +28,14 @@ interface UserRepository
     public function findUserOfEmail(string $email): User;
 
     /**
+     * @param string $email
+     * @return User
+     * @throws UserNotFoundException
+     */
+    public function findUserOfToken(string $token): User;
+    
+
+    /**
      * @param mixed $attributes
      * @return User
      */

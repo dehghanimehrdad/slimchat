@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Application\Actions\Message\ListMessagesAction;
+use App\Application\Actions\Message\SendMessageAction;
 use App\Application\Actions\User\LoginUserAction;
 use App\Application\Actions\User\RegisterUserAction;
 use App\Application\Middleware\AuthMiddleware;
@@ -21,14 +23,14 @@ return function (App $app) {
         return $response;
     });
 
-    $app->group('/messages', function (Group $group) {
-
-    })->add(AuthMiddleware::class);
-
     $app->group('/auth', function (Group $group) {
         $group->post('/register', RegisterUserAction::class);
         $group->post('/login', LoginUserAction::class);
     });
 
+    $app->group('/messages', function (Group $group) {
+        $group->get('', ListMessagesAction::class);
+        $group->post('', SendMessageAction::class);
+    })->add(AuthMiddleware::class);
 
 };
