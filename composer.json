@@ -24,6 +24,8 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-json": "*",
+        "illuminate/database": "^10.0",
+        "illuminate/events": "^10.0",
         "monolog/monolog": "^2.8",
         "php-di/php-di": "^6.4",
         "slim/psr7": "^1.5",
@@ -39,14 +41,17 @@
     },
     "config": {
         "allow-plugins": {
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "kylekatarnls/update-helper": true
         },
         "process-timeout": 0,
         "sort-packages": true
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "App\\": "src/",
+            "DB\\": "app/Db/"
+
         }
     },
     "autoload-dev": {

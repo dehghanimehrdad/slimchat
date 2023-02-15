@@ -9,6 +9,8 @@ use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use App\Factories\DatabaseManagerFactory;
 
 return function (ContainerBuilder $containerBuilder) {
     $containerBuilder->addDefinitions([
@@ -25,6 +27,10 @@ return function (ContainerBuilder $containerBuilder) {
             $logger->pushHandler($handler);
 
             return $logger;
+        },
+        Capsule::class => function (ContainerInterface $container) {
+            $factory = new DatabaseManagerFactory($container);
+            return new $factory->capsule;
         },
     ]);
 };

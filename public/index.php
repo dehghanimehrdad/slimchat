@@ -6,9 +6,13 @@ use App\Application\Handlers\HttpErrorHandler;
 use App\Application\Handlers\ShutdownHandler;
 use App\Application\ResponseEmitter\ResponseEmitter;
 use App\Application\Settings\SettingsInterface;
+// use App\Factories\DatabaseManagerFactory;
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
 use Slim\Factory\ServerRequestCreatorFactory;
+use Illuminate\Container\Container;
+use Illuminate\Database\Capsule\Manager;
+use Illuminate\Events\Dispatcher;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -38,6 +42,23 @@ $container = $containerBuilder->build();
 AppFactory::setContainer($container);
 $app = AppFactory::create();
 $callableResolver = $app->getCallableResolver();
+$container->set('db', function () use ($container) {
+    $settings = $container->get(SettingsInterface::class);
+	$dbSettings = $settings->get('db');
+	
+	$manager = new Manager;
+	$manager->addConnection($dbSettings);
+
+	$manager->getConnection()->enableQueryLog();
+
+	$manager->setEventDispatcher(new Dispatcher(new Container()));
+
+	$manager->setAsGlobal();
+	$manager->bootEloquent();
+
+	return $manager;
+});
+$app->getContainer()->get('db'); 
 
 // Register middleware
 $middleware = require __DIR__ . '/../app/middleware.php';

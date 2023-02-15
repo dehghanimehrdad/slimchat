@@ -6,17 +6,16 @@ namespace App\Application\Actions\User;
 
 use Psr\Http\Message\ResponseInterface as Response;
 
-class ViewUserAction extends UserAction
+class RegisterUserAction extends UserAction
 {
     /**
      * {@inheritdoc}
      */
     protected function action(): Response
     {
-        $userId = (int) $this->resolveArg('id');
-        $user = $this->userRepository->findUserOfId($userId);
+        $user = $this->userRepository->create($this->request->getParsedBody());
 
-        $this->logger->info("User of id `${userId}` was viewed.");
+        $this->logger->info("User of id $user->id was created.");
 
         return $this->respondWithData($user);
     }

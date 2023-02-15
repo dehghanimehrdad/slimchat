@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Domain\User;
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface UserRepository
 {
     /**
-     * @return User[]
+     * @return Collection
      */
-    public function findAll(): array;
+    public function findAll(): Collection;
 
     /**
      * @param int $id
@@ -17,4 +19,23 @@ interface UserRepository
      * @throws UserNotFoundException
      */
     public function findUserOfId(int $id): User;
+
+    /**
+     * @param string $email
+     * @return User
+     * @throws UserNotFoundException
+     */
+    public function findUserOfEmail(string $email): User;
+
+    /**
+     * @param mixed $attributes
+     * @return User
+     */
+    public function create($attributes): User;
+
+    /**
+     * @param mixed $attributes
+     * @return User
+     */
+    public function update(User $user, $attributes): bool;
 }

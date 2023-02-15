@@ -5,53 +5,18 @@ declare(strict_types=1);
 namespace App\Domain\User;
 
 use JsonSerializable;
+use Illuminate\Database\Eloquent\Model;
 
-class User implements JsonSerializable
+class User extends Model
 {
-    private ?int $id;
+    protected $table = 'users';
 
-    private string $username;
 
-    private string $firstName;
+    protected $fillable = [
+        'name', 'email', 'password', 'token'
+    ];
 
-    private string $lastName;
-
-    public function __construct(?int $id, string $username, string $firstName, string $lastName)
-    {
-        $this->id = $id;
-        $this->username = strtolower($username);
-        $this->firstName = ucfirst($firstName);
-        $this->lastName = ucfirst($lastName);
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getUsername(): string
-    {
-        return $this->username;
-    }
-
-    public function getFirstName(): string
-    {
-        return $this->firstName;
-    }
-
-    public function getLastName(): string
-    {
-        return $this->lastName;
-    }
-
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->id,
-            'username' => $this->username,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
-        ];
-    }
+    protected $hidden = [
+        'password', 'token', 'email'
+    ];
 }
